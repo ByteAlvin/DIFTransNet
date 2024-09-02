@@ -6,9 +6,7 @@ import threading
 from dataset import *
 import time
 from collections import OrderedDict
-from model.SCTransNet import SCTransNet as SCTransNet
-# from loss import *
-import model.Config as config
+from model.STFUNet import STFUNet as STFUNet
 import numpy as np
 import torch
 from skimage import measure
@@ -381,18 +379,18 @@ class PD_FA():
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 parser = argparse.ArgumentParser(description="PyTorch BasicIRSTD test")
 parser.add_argument('--ROC_thr', type=int, default=10, help='num')
-parser.add_argument("--model_names", default=['SCTrans'], type=list,
+parser.add_argument("--model_names", default=['STFUNet'], type=list,
                     help="model_name: 'ACM', 'Ours01', 'DNANet', 'ISNet', 'ACMNet', 'Ours01', 'ISTDU-Net', 'U-Net', 'RISTDnet'")
-parser.add_argument("--pth_dirs", default=['SIRST3/ARCNet_NUAA_NUDT_IRSTD1K.pth.tar'], type=list)
-parser.add_argument("--dataset_dir", default=r'D:\05TGARS\Upload\datasets', type=str, help="train_dataset_dir")
-parser.add_argument("--dataset_names", default=['NUAA-SIRST', 'NUDT-SIRST', 'IRSTD-1K'], type=list,
+parser.add_argument("--pth_dirs", default=['NUDT/STFUNet_1000.pth.tar'], type=list)
+parser.add_argument("--dataset_dir", default=r'./datasets', type=str, help="train_dataset_dir")
+parser.add_argument("--dataset_names", default=['NUDT'], type=list,
                     help="dataset_name: 'NUAA-SIRST', 'NUDT-SIRST', 'IRSTD-1K', 'SIRST3', 'NUDT-SIRST-Sea'")
 parser.add_argument("--img_norm_cfg", default=None, type=dict,
                     help="specific a img_norm_cfg, default=None (using img_norm_cfg values of each dataset)")
 parser.add_argument("--save_img", default=False, type=bool, help="save image of or not")
-parser.add_argument("--save_img_dir", type=str, default=r'D:\SCI\01_02_SCI\Result/',
+parser.add_argument("--save_img_dir", type=str, default=r'./results',
                     help="path of saved image")
-parser.add_argument("--save_log", type=str, default=r'D:\05TGARS\upload\log/', help="path of saved .pth")
+parser.add_argument("--save_log", type=str, default=r'log/', help="path of saved .pth")
 parser.add_argument("--threshold", type=float, default=0.5)
 
 global opt
@@ -411,9 +409,9 @@ def test():
     # 计算PD_FA   完全OK
     eval_05 = PD_FA()
     ROC_05 = ROCMetric05(nclass=1, bins=10)
-    config_vit = config.get_SCTrans_config()
+    # config_vit = config.get_SCTrans_config()
     # net = SCTransNet(config_vit, mode='test', deepsuper=True)
-    net = SCTransNet(config_vit, mode='test', deepsuper=True).cuda()
+    net = STFUNet().cuda()
     state_dict = torch.load(opt.pth_dir)
     # state_dict = torch.load(opt.pth_dir, map_location='cpu')
     new_state_dict = OrderedDict()
@@ -427,6 +425,7 @@ def test():
     with torch.no_grad():
         for idx_iter, (img, gt_mask, size, img_dir) in enumerate(tbar):
             # img = Variable(img)
+            img = img.cuda()
             pred = net.forward(img).cuda()
             # pred = pred[:, :, :size[0], :size[1]]
             pred = pred[:, :, :size[0], :size[1]].cuda()
@@ -465,7 +464,7 @@ def test():
 
 
 if __name__ == '__main__':
-    opt.f = open(opt.save_log + 'test_' + (time.ctime()).replace(' ', '_').replace(':', '_') + '.txt', 'w')
+    opt.f = open(opt.save_log +'/testlog'+ 'test_' + (time.ctime()).replace(' ', '_').replace(':', '_') + '.txt', 'w')
     if opt.pth_dirs == None:
         for i in range(len(opt.model_names)):
             opt.model_name = opt.model_names[i]
@@ -498,4 +497,5 @@ if __name__ == '__main__':
                     test()
                     print('\n')
                     opt.f.write('\n')
+        
         opt.f.close()
