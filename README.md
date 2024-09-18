@@ -131,9 +131,9 @@ on NUST-SIRST
 | ---------------- | :------------: | :----------: | :----------: | :----------------------------------------------------------: |
 | DNANet-ResNet-18 |     46.73      |    81.29     |    33.87     | [[Weights]](https://drive.google.com/file/d/1TF0bZRMsGuKzMhlHKH1LygScBveMcCS2/view?usp=sharing) |
 
-*This code is highly borrowed from [SCTransNet](https://github.com/YimianDai/open-acm). Thanks to Yimian Dai.
+*This code is highly borrowed from [SCTransNet](https://github.com/YimianDai/open-acm). Thanks to Shuai Yuan.
 
-*The overall repository style is highly borrowed from [PSA](https://github.com/jiwoon-ahn/psa). Thanks to jiwoon-ahn.
+*The overall repository style is highly borrowed from [DNA-Net](https://github.com/YeRen123455/Infrared-Small-Target-Detection). Thanks to Boyang Li.
 
 ## Referrences
 
