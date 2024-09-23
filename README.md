@@ -18,9 +18,8 @@ We propose a dense nested attention network (DNANet) to achieve accurate single-
 
 ## Prerequisite
 
-* Tested on CentOS 7, with Python 3.7.16, PyTorch 1.7, Torchvision 0.11.2, CUDA 11.1, and 1x NVIDIA 2080Ti and also 
-
-* Tested on Windows 11, with Python 3.11.7, PyTorch 2.2, Torchvision 0.17.1, CUDA 12.1, and 1x NVIDIA 4060.
+* Tested on CentOS 7, with Python 3.7, PyTorch 1.7, Torchvision 0.11.2, CUDA 11.1, and 1x NVIDIA 2080Ti and also 
+* Tested on Windows 11, with Python 3.11, PyTorch 2.2, Torchvision 0.17.1, CUDA 12.1, and 1x NVIDIA 4060.
 * **NUDT-SIRST** &nbsp; [[download]](https://github.com/YeRen123455/Infrared-Small-Target-Detection) &nbsp; [[paper]](https://ieeexplore.ieee.org/abstract/document/9864119)
 * **IRSTD-1K** &nbsp; [[download dir]](https://github.com/RuiZhang97/ISNet) &nbsp; [[paper]](https://ieeexplore.ieee.org/document/9880295)
 
