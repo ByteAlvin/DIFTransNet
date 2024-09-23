@@ -13,31 +13,8 @@ We propose a dense nested attention network (DNANet) to achieve accurate single-
 
 3. Performing well on all existing SIRST datasets.
 
-## Dataset Introduction
 
-NUDT-SIRST is a synthesized dataset, which contains 1327 images with resolution of 256x256. The advantage of synthesized dataset compared to real dataset lies in three aspets:
 
-1. Accurate annotations.
-
-2. Massive generation with low cost (i.e., time and money).
-
-3. Numerous categories of target, rich target sizes, diverse clutter backgrounds.
-
-## Citation
-
-If you find the code useful, please consider citing our paper using the following BibTeX entry.
-
-```
-@article{DNANet,
-  title={Dense nested attention network for infrared small target detection},
-  author={Li, Boyang and Xiao, Chao and Wang, Longguang and Wang, Yingqian and Lin, Zaiping and Li, Miao and An, Wei and Guo, Yulan},
-  journal={IEEE Transactions on Image Processing},
-  year={2023},
-  volume={32},
-  pages={1745-1758},
-  publisher={IEEE}
-}
-```
 
 ## Prerequisite
 
@@ -114,19 +91,12 @@ python test.py
 ```
 ## Results and Trained Models
 
-#### Qualitative Results
-
-
-#### Quantative Results 
-
 #### Quantitative Results on Mixed SIRST, NUDT-SIRST, and IRSTD-1K
 
 | Model         | mIoU (x10(-2)) | nIoU (x10(-2)) | F-measure (x10(-2))| Pd (x10(-2))|  Fa (x10(-6))|
-| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
-| SIRST    | 77.50  |  81.08 | 87.32 | 96.95 | 13.92 |
-| NUDT-SIRST    | 94.09  |  94.38 | 96.95 | 98.62 | 4.29  | 
-| IRSTD-1K      | 68.03  |  68.15 | 80.96 | 93.27 | 10.74 |
-| [[Weights]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
+| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|:-----:
+| NUDT-SIRST    | 94.09  |  94.38 | 96.95 | 98.62 | 4.29  |[[Weights]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
+| IRSTD-1K      | 68.03  |  68.15 | 80.96 | 93.27 | 10.74 |[[Weights]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
 
 *This code is highly borrowed from [SCTransNet](https://github.com/YimianDai/open-acm). Thanks to Shuai Yuan.
 
