@@ -95,7 +95,7 @@ python test.py
 
 *This code is highly borrowed from [SCTransNet](https://github.com/YimianDai/open-acm). Thanks to Shuai Yuan.
 
-*The overall repository style is highly borrowed from [BasicIRSTD]([https://github.com/YeRen123455/Infrared-Small-Target-Detection](https://github.com/XinyiYing/BasicIRSTD). Thanks to Xinyi Ying.
+*The overall repository style is highly borrowed from [BasicIRSTD]([[https://github.com/YeRen123455/Infrared-Small-Target-Detection](https://github.com/XinyiYing/BasicIRSTD]). Thanks to Xinyi Ying.
 
 ## Contact
 **Welcome to raise issues or email to [liushenao23@mails.ucas.ac.cn](liushenao23@mails.ucas.ac.cn) or [shenaoliu@163.com](shenaoliu@163.com) for any question regarding our STFUNet.**
