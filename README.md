@@ -105,7 +105,10 @@ If you find the code useful, please consider citing our paper using the followin
 
 ##### 2. Train.
 ```bash
-python train.py
+CUDA_VISIBLE_DEVICES=1  python train.py ----dataset_names NUDT-SIRST --patchSize 256
+```
+```bash
+CUDA_VISIBLE_DEVICES=1  python train.py ----dataset_names IRSTD-1K --patchSize 256
 ```
 
 #### 3. Test and demo.
