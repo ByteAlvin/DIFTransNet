@@ -111,7 +111,7 @@ python train.py
 #### 3. Test and demo.
 ```bash
 python test.py
-
+```
 ## Results and Trained Models
 
 #### Qualitative Results
