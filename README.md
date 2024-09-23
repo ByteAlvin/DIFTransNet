@@ -1,8 +1,5 @@
-# Dense Nested Attention Network for Infrared Small Target Detection
+# STFUNet：Swin Transformer Unet with Hierarchical Fusion Module for Infrared Small Target Detection
 
-## Good News! Our paper has been accepted by `IEEE Transaction on Image Processing`. Our team will release more interesting works and applications on SIRST soon. Please keep following our repository.
-
-![outline](overall_structure.png)
 
 ## Algorithm Introduction
 
@@ -108,7 +105,7 @@ If you find the code useful, please consider citing our paper using the followin
 CUDA_VISIBLE_DEVICES=1  python train.py ----dataset_names NUDT-SIRST --patchSize 256
 ```
 ```bash
-CUDA_VISIBLE_DEVICES=1  python train.py ----dataset_names IRSTD-1K --patchSize 256
+CUDA_VISIBLE_DEVICES=1  python train.py ----dataset_names IRSTD-1K --patchSize 512
 ```
 
 #### 3. Test and demo.
@@ -119,48 +116,21 @@ python test.py
 
 #### Qualitative Results
 
-![outline](Qualitative_result.png)
 
 #### Quantative Results 
 
-on NUDT-SIRST
+#### Quantitative Results on Mixed SIRST, NUDT-SIRST, and IRSTD-1K
 
-| Model            | mIoU (x10(-2)) | Pd (x10(-2)) | Fa (x10(-6)) |                                                              |
-| ---------------- | :------------: | :----------: | :----------: | :----------------------------------------------------------: |
-| DNANet-VGG-10    |     85.23      |    96.95     |    6.782     |                                                              |
-| DNANet-ResNet-10 |     86.36      |    97.39     |    6.897     |                                                              |
-| DNANet-ResNet-18 |     87.09      |    98.73     |    4.223     |                                                              |
-| DNANet-ResNet-18 |     88.61      |    98.42     |     4.30     | [[Weights]](https://drive.google.com/file/d/1NDvjOiWecfWNPaO12KeIgiJMTKSFS6wj/view?usp=sharing) |
-| DNANet-ResNet-34 |     86.87      |    97.98     |    3.710     |                                                              |
-
-
-on NUAA-SIRST
-
-| Model            | mIoU (x10(-2)) | Pd (x10(-2)) | Fa (x10(-6)) |                                                              |
-| ---------------- | :------------: | :----------: | :----------: | :----------------------------------------------------------: |
-| DNANet-VGG-10    |     74.96      |    97.34     |    26.73     |                                                              |
-| DNANet-ResNet-10 |     76.24      |    97.71     |    12.80     |                                                              |
-| DNANet-ResNet-18 |     77.47      |    98.48     |    2.353     |                                                              |
-| DNANet-ResNet-18 |     79.26      |    98.48     |     2.30     | [[Weights]](https://drive.google.com/file/d/1W0jFN9ZlaIdGFemYKi34tmJfGxjUGCRc/view?usp=sharing) |
-| DNANet-ResNet-34 |     77.54      |    98.10     |    2.510     |                                                              |
-
-on NUST-SIRST
-
-| Model            | mIoU (x10(-2)) | Pd (x10(-2)) | Fa (x10(-6)) |                                                              |
-| ---------------- | :------------: | :----------: | :----------: | :----------------------------------------------------------: |
-| DNANet-ResNet-18 |     46.73      |    81.29     |    33.87     | [[Weights]](https://drive.google.com/file/d/1TF0bZRMsGuKzMhlHKH1LygScBveMcCS2/view?usp=sharing) |
+| Model         | mIoU (x10(-2)) | nIoU (x10(-2)) | F-measure (x10(-2))| Pd (x10(-2))|  Fa (x10(-6))|
+| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
+| SIRST    | 77.50  |  81.08 | 87.32 | 96.95 | 13.92 |
+| NUDT-SIRST    | 94.09  |  94.38 | 96.95 | 98.62 | 4.29  | 
+| IRSTD-1K      | 68.03  |  68.15 | 80.96 | 93.27 | 10.74 |
+| [[Weights]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
 
 *This code is highly borrowed from [SCTransNet](https://github.com/YimianDai/open-acm). Thanks to Shuai Yuan.
 
 *The overall repository style is highly borrowed from [DNA-Net](https://github.com/YeRen123455/Infrared-Small-Target-Detection). Thanks to Boyang Li.
-
-## Referrences
-
-1. Dai Y, Wu Y, Zhou F, et al. Asymmetric contextual modulation for infrared small target detection[C]//Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision. 2021: 950-959. [[code]](https://github.com/YimianDai/open-acm) 
-
-2. Zhou Z, Siddiquee M M R, Tajbakhsh N, et al. Unet++: Redesigning skip connections to exploit multiscale features in image segmentation[J]. IEEE transactions on medical imaging, 2019, 39(6): 1856-1867. [[code]](https://github.com/MrGiovanni/UNetPlusPlus)
-
-3. He K, Zhang X, Ren S, et al. Deep residual learning for image recognition[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2016: 770-778. [[code]](https://github.com/rwightman/pytorch-image-models)
 
 ## Contact
 **Welcome to raise issues or email to [liushenao23@mails.ucas.ac.cn](liushenao23@mails.ucas.ac.cn) or [shenaoliu@163.com](shenaoliu@163.com) for any question regarding our STFUNet.**
