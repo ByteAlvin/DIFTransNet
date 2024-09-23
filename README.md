@@ -56,45 +56,61 @@ If you find the code useful, please consider citing our paper using the followin
 
 ## Usage
 
-#### On windows:
+#### 1. Data
 
-```
-Click on train.py and run it. 
-```
+* **Our project has the following structure:**
+  ```
+  ├──./datasets/
+  │    ├── IRSTD-1K
+  │    │    ├── images
+  │    │    │    ├── XDU0.png
+  │    │    │    ├── XDU1.png
+  │    │    │    ├── ...
+  │    │    ├── masks
+  │    │    │    ├── XDU0.png
+  │    │    │    ├── XDU1.png
+  │    │    │    ├── ...
+  │    │    ├── img_idx
+  │    │    │    ├── train_IRSTD-1K.txt
+  │    │    │    ├── test_IRSTD-1K.txt
+  │    ├── NUDT-SIRST
+  │    │    ├── images
+  │    │    │    ├── 000001.png
+  │    │    │    ├── 000002.png
+  │    │    │    ├── ...
+  │    │    ├── masks
+  │    │    │    ├── 000001.png
+  │    │    │    ├── 000002.png
+  │    │    │    ├── ...
+  │    │    ├── img_idx
+  │    │    │    ├── train_NUDT-SIRST.txt
+  │    │    │    ├── test_NUDT-SIRST.txt
+  │    ├── ...
+  │    ├── ...
+  │    ├── SIRST3
+  │    │    ├── images
+  │    │    │    ├── XDU0.png
+  │    │    │    ├── XDU1.png
+  │    │    │    ├── ...
+  │    │    ├── masks
+  │    │    │    ├── XDU0.png
+  │    │    │    ├── XDU1.png
+  │    │    │    ├── ...
+  │    │    ├── img_idx
+  │    │    │    ├── train_SIRST3.txt
+  │    │    │    ├── test_SIRST3.txt
+  
+  ```
 
-#### On Ubuntu:
 
-#### 1. Train.
-
+##### 2. Train.
 ```bash
-python train.py --base_size 256 --crop_size 256 --epochs 1500 --dataset [dataset-name] --split_method 50_50 --model [model name] --backbone resnet_18  --deep_supervision True --train_batch_size 16 --test_batch_size 16 --mode TXT
-
+python train.py
 ```
 
-#### 2. Test.
-
+#### 3. Test and demo.
 ```bash
-python test.py --base_size 256 --crop_size 256 --st_model [trained model path] --model_dir [model_dir] --dataset [dataset-name] --split_method 50_50 --model [model name] --backbone resnet_18  --deep_supervision True --test_batch_size 1 --mode TXT 
-```
-
-#### (Optional 1) Visulize your predicts.
-
-```bash
-python visulization.py --base_size 256 --crop_size 256 --st_model [trained model path] --model_dir [model_dir] --dataset [dataset-name] --split_method 50_50 --model [model name] --backbone resnet_18  --deep_supervision True --test_batch_size 1 --mode TXT 
-```
-
-#### (Optional 2) Test and visulization.
-
-```bash
-python test_and_visulization.py --base_size 256 --crop_size 256 --st_model [trained model path] --model_dir [model_dir] --dataset [dataset-name] --split_method 50_50 --model [model name] --backbone resnet_18  --deep_supervision True --test_batch_size 1 --mode TXT 
-```
-
-#### (Optional 3) Demo (with your own IR image).
-
-```bash
-python demo.py --base_size 256 --crop_size 256 --img_demo_dir [img_demo_dir] --img_demo_index [image_name]  --model [model name] --backbone resnet_18  --deep_supervision True --test_batch_size 1 --mode TXT  --suffix [img_suffix]
-
-```
+python test.py
 
 ## Results and Trained Models
 
