@@ -88,10 +88,10 @@ python test.py
 
 #### Quantitative Results on NUDT-SIRST, and IRSTD-1K
 
-| Model         | mIoU (x10(-2)) | nIoU (x10(-2)) | F-measure (x10(-2))| Pd (x10(-2))|Fa (x10(-6))| Weights|
+| Model         | pixAcc (x10(-2)) | mIoU (x10(-2)) | Pd (x10(-2))|Fa (x10(-6))| Weights|
 | ----------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| NUDT-SIRST    | 94.09  |  94.38 | 96.95 | 98.62 | 4.29  |[[best.pt]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
-| IRSTD-1K      | 68.03  |  68.15 | 80.96 | 93.27 | 10.74 |[[best.pt]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
+| NUDT-SIRST    | 94.09  |  94.38 |98.62 | 4.29  |[[best.pt]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
+| IRSTD-1K      | 68.03  |  68.15 |  93.27 | 10.74 |[[best.pt]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
 
 *This code is highly borrowed from [SCTransNet](https://github.com/YimianDai/open-acm). Thanks to Shuai Yuan.
 
