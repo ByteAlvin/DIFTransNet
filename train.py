@@ -1,21 +1,17 @@
 import argparse
 import time
 import os
-import cv2
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from dataset import *
 from metrics import *
 from utils import *
 from tensorboardX import SummaryWriter
-from model.STFUNet import STFUNet as STFUNet
+from model.model_STFUNet import STFUNet as STFUNet
 
 parser = argparse.ArgumentParser(description="PyTorch BasicIRSTD train")
 parser.add_argument("--model_names", default=['STFUNet'], type=list, help="'ACM', 'ALCNet', 'DNANet', 'ISNet', 'UIUNet', 'RDIAN', 'RISTDnet'")
-parser.add_argument("--dataset_names", default=['NUDT'], type=list)
-# SIRST3： NUAA NUDT IRSTD-1K
+parser.add_argument("--dataset_names", default=['IRSTD-1K'], type=list)
 parser.add_argument("--optimizer_name", default='Adam', type=str, help="optimizer name: AdamW, Adam, Adagrad, SGD")
 parser.add_argument("--epochs", default=1000, type=int, help="optimizer name: AdamW, Adam, Adagrad, SGD")
 parser.add_argument("--begin_test", default=500, type=int)
@@ -38,8 +34,6 @@ opt = parser.parse_args()
 
 seed_pytorch(opt.seed)
 
-
-
 def weights_init_kaiming(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
@@ -49,7 +43,6 @@ def weights_init_kaiming(m):
     elif classname.find('BatchNorm') != -1:
         init.normal_(m.weight.data, 1.0, 0.02)
         init.constant_(m.bias.data, 0.0)
-
 
 def train():
     train_set = TrainSetLoader(dataset_dir=opt.dataset_dir, dataset_name=opt.dataset_name, patch_size=opt.patchSize,
@@ -68,31 +61,23 @@ def train():
     writer = SummaryWriter(opt.log_dir)
 
     if opt.resume:
-        # for resume_pth in opt.resume:
-        #     if opt.dataset_name in resume_pth and opt.model_name in resume_pth:
         ckpt = torch.load('XX\\UCT04_best.pth.tar')
         net.load_state_dict(ckpt['state_dict'])
         epoch_state = ckpt['epoch']
         total_loss_list = ckpt['total_loss']
-        # for i in range(len(opt.scheduler_settings['step'])):
-        #     opt.scheduler_settings['step'][i] = opt.scheduler_settings['step'][i] - ckpt['epoch']
 
-    ### Default settings of SCTransNet
     if opt.optimizer_name == 'Adam':
         opt.optimizer_settings = {'lr': 0.001}
         opt.scheduler_name = 'CosineAnnealingLR'
         opt.scheduler_settings = {'epochs': opt.epochs, 'eta_min': 1e-5, 'last_epoch': -1}
 
-    ### Default settings of DNANet
     if opt.optimizer_name == 'Adagrad':
         opt.optimizer_settings = {'lr': 0.05}
         opt.scheduler_name = 'CosineAnnealingLR'
         opt.scheduler_settings = {'epochs': opt.epochs, 'min_lr': 1e-5}
 
-    ### Default settings of EGEUNet
     if opt.optimizer_name == 'AdamW':
-        opt.optimizer_settings = {'lr': 0.001, 'betas': (0.9, 0.999), "eps": 1e-8, "weight_decay": 1e-2,
-                                  "amsgrad": False}
+        opt.optimizer_settings = {'lr': 0.001, 'betas': (0.9, 0.999), "eps": 1e-8, "weight_decay": 1e-2, "amsgrad": False}
         opt.scheduler_name = 'CosineAnnealingLR'
         opt.scheduler_settings = {'epochs': opt.epochs, 'T_max': 50, 'eta_min': 1e-5, 'last_epoch': -1}
 
@@ -101,9 +86,7 @@ def train():
     optimizer, scheduler = get_optimizer(net, opt.optimizer_name, opt.scheduler_name, opt.optimizer_settings,
                                          opt.scheduler_settings)
 
-
     for idx_epoch in range(epoch_state, opt.nEpochs):
-
         results1 = (0, 0)
         results2 = (0, 0)
         for idx_iter, (img, gt_mask) in enumerate(train_loader):
@@ -121,16 +104,12 @@ def train():
 
         if (idx_epoch + 1) % opt.every_print == 0:
             total_loss_list.append(float(np.array(total_loss_epoch).mean()))
-            print(time.ctime()[4:-5] + ' Epoch---%d, total_loss---%f, lr---%f,'
-                  % (idx_epoch + 1, total_loss_list[-1], scheduler.get_last_lr()[0]))
-            opt.f.write(time.ctime()[4:-5] + ' Epoch---%d, total_loss---%f,\n'
-                        % (idx_epoch + 1, total_loss_list[-1]))
+            print(time.ctime()[4:-5] + ' Epoch---%d, total_loss---%f, lr---%f,' % (idx_epoch + 1, total_loss_list[-1], scheduler.get_last_lr()[0]))
+            opt.f.write(time.ctime()[4:-5] + ' Epoch---%d, total_loss---%f,\n' % (idx_epoch + 1, total_loss_list[-1]))
             total_loss_epoch = []
-            # Log the scalar values
             writer.add_scalar('loss', total_loss_list[-1], idx_epoch + 1)
             writer.add_scalar('lr', scheduler.get_last_lr()[0], idx_epoch + 1)
 
-        # 500
         if (idx_epoch + 1) >= opt.begin_test and (idx_epoch + 1) % opt.every_test == 0:
             test_set = TestSetLoader(opt.dataset_dir, opt.dataset_name, opt.dataset_name, img_norm_cfg=opt.img_norm_cfg)
             test_loader = DataLoader(dataset=test_set, num_workers=1, batch_size=1, shuffle=False)
@@ -150,8 +129,6 @@ def train():
                         pred = pred
                     pred = pred[:, :, :size[0], :size[1]]
                     gt_mask = gt_mask[:, :, :size[0], :size[1]]
-                    # if pred.size() != gt_mask.size():
-                    #     print('1111')
                     loss = net.loss(pred, gt_mask.cuda())
                     test_loss.append(loss.detach().cpu())
                     eval_mIoU.update((pred > opt.threshold).cpu(), gt_mask.cpu())
@@ -161,7 +138,6 @@ def train():
                 results2 = eval_PD_FA.get()
                 writer.add_scalar('mIOU', results1[-1], idx_epoch + 1)
                 writer.add_scalar('testloss', test_loss[-1], idx_epoch + 1)
-
 
         if (idx_epoch + 1) % opt.every_save_pth == 0:
             save_pth = opt.save + '/' + opt.dataset_name + '/' + opt.model_name + '_' + str(idx_epoch + 1) + '.pth.tar'
@@ -184,7 +160,6 @@ def train():
             print("pixAcc, mIoU:\t" + str(best_mIOU))
             print("testloss:\t" + str(test_loss[-1]))
             print("PD, FA:\t" + str(best_Pd))
-
             opt.f.write("pixAcc, mIoU:\t" + str(best_mIOU) + '\n')
             opt.f.write("PD, FA:\t" + str(best_Pd) + '\n')
             save_pth = opt.save + '/' + opt.dataset_name + '/' + opt.model_name + '_' + str(idx_epoch + 1) + '_' + 'best' + '.pth.tar'
@@ -194,7 +169,6 @@ def train():
                 'total_loss': total_loss_list,
             }, save_pth)
 
-        # last epoch
         if (idx_epoch + 1) == opt.nEpochs and (idx_epoch + 1) % opt.every_save_pth != 0:
             save_pth = opt.save + '/' + opt.dataset_name + '/' + opt.model_name + '_' + str(idx_epoch + 1) + '.pth.tar'
             save_checkpoint({
@@ -203,7 +177,6 @@ def train():
                 'total_loss': total_loss_list,
             }, save_pth)
             test(save_pth)
-
 
 def test(save_pth):
     test_set = TestSetLoader(opt.dataset_dir, opt.dataset_name, opt.dataset_name, img_norm_cfg=opt.img_norm_cfg)
@@ -228,11 +201,9 @@ def test(save_pth):
             test_loss_a.append(loss.detach().cpu())
             eval_mIoU.update((pred > opt.threshold).cpu(), gt_mask.cpu())
             eval_PD_FA.update((pred[0, 0, :, :] > opt.threshold).cpu(), gt_mask[0, 0, :, :], size)
-
         test_loss_a.append(float(np.array(test_loss_a).mean()))
         results1 = eval_mIoU.get()
         results2 = eval_PD_FA.get()
-
         print('== == == == == == == ', opt.model_name, ' == == == == == == ==')
         print("pixAcc, mIoU:\t" + str(results1))
         print("testloss:\t" + str(test_loss_a[-1]))
@@ -240,19 +211,16 @@ def test(save_pth):
         opt.f.write("pixAcc, mIoU:\t" + str(results1) + '\n')
         opt.f.write("PD, FA:\t" + str(results2) + '\n')
 
-
 def save_checkpoint(state, save_path):
     if not os.path.exists(os.path.dirname(save_path)):
         os.makedirs(os.path.dirname(save_path))
     torch.save(state, save_path)
     return save_path
 
-
 class Net(nn.Module):
     def __init__(self, model_name, mode):
         super(Net, self).__init__()
         self.model_name = model_name
-        # ************************************************loss*************************************************#
         self.cal_loss = nn.BCELoss(size_average=True)
         if model_name == 'STFUNet':
                 self.model =STFUNet()
@@ -282,7 +250,6 @@ class Net(nn.Module):
         else:
             loss = self.cal_loss(preds, gt_masks)
             return loss
-
 
 if __name__ == '__main__':
     for dataset_name in opt.dataset_names:
