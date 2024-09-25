@@ -76,8 +76,8 @@ python test.py
 
 | Model         | pixAcc (x10(-2)) | mIoU (x10(-2)) | Pd (x10(-2))|Fa (x10(-6))| Weights|
 | :-------------: |:-------------:|:-----:|:-----:|:-----:|:-----:|
-| NUDT-SIRST    | 96.69  |  95.15 |99.05 | 3.88  |[[best.pt]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
-| IRSTD-1K      | 68.03  |  68.15 |  93.27 | 10.74 |[[best.pt]](https://drive.google.com/file/d/1Kxs2wKG2uq2YiGJOBGWoVz7B1-8DJoz3/view?usp=sharing)|
+| NUDT-SIRST    | 96.69  |  95.15 |99.05 | 3.88  |[[best.pt]](https://pan.baidu.com/s/1J2Ibn-3vyWobxD6vybWUAA?pwd=urky)|
+| IRSTD-1K      | 76.31  |  66.79 |  92.26 | 17.61 |[[best.pt]](https://pan.baidu.com/s/1aIG00HSpLmzGzIobXOuhNQ?pwd=ci4j)|
 
 *This code is highly borrowed from [SCTransNet](https://github.com/YimianDai/open-acm). Thanks to Shuai Yuan.
 
