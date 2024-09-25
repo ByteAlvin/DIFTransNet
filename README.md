@@ -1,20 +1,6 @@
 # STFUNet：Swin Transformer Unet with Hierarchical Fusion Module for Infrared Small Target Detection
 
 
-## Algorithm Introduction
-
-
-
-We propose a dense nested attention network (DNANet) to achieve accurate single-frame infrared small target detection and develop an open-sourced infrared small target dataset (namely, NUDT-SIRST) in this paper. Experiments on both public (e.g., NUAA-SIRST, NUST-SIRST) and our self-developed datasets demonstrate the effectiveness of our method. The contribution of this paper are as follows:
-
-1. We propose a dense nested attention network (namely, DNANet) to maintain small targets in deep layers.
-
-2. An open-sourced dataset (i.e., NUDT-SIRST) with rich targets.
-
-3. Performing well on all existing SIRST datasets.
-
-
-
 
 ## Prerequisite
 
