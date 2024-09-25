@@ -1,15 +1,8 @@
 import numpy as np
-import torch
 from skimage import measure
 
-
 class ROCMetric():
-    """Computes pixAcc and mIoU metric scores
-    """
-
     def __init__(self, nclass, bins):
-        # bin的意义实际上是确定ROC曲线上的threshold取多少个离散值
-        # nclass :有几个类别 红外弱小目标检测只有一个类别
         super(ROCMetric, self).__init__()
         self.nclass = nclass
         self.bins = bins
@@ -18,14 +11,10 @@ class ROCMetric():
         self.fp_arr = np.zeros(self.bins + 1)
         self.neg_arr = np.zeros(self.bins + 1)
         self.class_pos = np.zeros(self.bins + 1)
-        # self.reset()
 
-    # 网络输入的结果和标签 计算两者之前的东西
     def update(self, preds, labels):
         for iBin in range(self.bins + 1):
-            # score_thresh = (iBin + 0.0) / self.bins
             score_thresh = -30 + iBin * (255 / self.bins)
-            # print(iBin, "-th, score_thresh: ", score_thresh)
             i_tp, i_pos, i_fp, i_neg, i_class_pos = cal_tp_pos_fp_neg(preds, labels, self.nclass, score_thresh)
             self.tp_arr[iBin] += i_tp
             self.pos_arr[iBin] += i_pos
@@ -34,12 +23,11 @@ class ROCMetric():
             self.class_pos[iBin] += i_class_pos
 
     def get(self):
-        tp_rates = self.tp_arr / (self.pos_arr + 0.001)  # tp_rates = recall = TP/(TP+FN)
-        fp_rates = self.fp_arr / (self.neg_arr + 0.001)  # fp_rates =  FP/(FP+TN)
+        tp_rates = self.tp_arr / (self.pos_arr + 0.001)
+        fp_rates = self.fp_arr / (self.neg_arr + 0.001)
         FP = self.fp_arr / (self.neg_arr + self.pos_arr)
-        recall = self.tp_arr / (self.pos_arr + 0.001)  # recall = TP/(TP+FN)
-        precision = self.tp_arr / (self.class_pos + 0.001)  # precision = TP/(TP+FP)
-
+        recall = self.tp_arr / (self.pos_arr + 0.001)
+        precision = self.tp_arr / (self.class_pos + 0.001)
         return tp_rates, fp_rates, recall, precision, FP
 
     def reset(self):
@@ -59,10 +47,10 @@ class mIoU():
     def update(self, preds, labels):
         correct, labeled = batch_pix_accuracy(preds, labels)
         inter, union = batch_intersection_union(preds, labels)
-        self.total_correct += correct  # 预测正确的像素数
-        self.total_label += labeled  # GT目标的像素数
-        self.total_inter += inter  # 交集
-        self.total_union += union  # 并集
+        self.total_correct += correct
+        self.total_label += labeled
+        self.total_inter += inter
+        self.total_union += union
 
     def get(self):
         pixAcc = 1.0 * self.total_correct / (np.spacing(1) + self.total_label)
@@ -96,8 +84,8 @@ class PD_FA():
         label = measure.label(labelss, connectivity=2)
         coord_label = measure.regionprops(label)
 
-        self.target += len(coord_label)   # 目标总数  直接就搞GT的连通域个数
-        self.image_area_total = []   # 图像中预测的区域列表
+        self.target += len(coord_label)
+        self.image_area_total = []
         self.image_area_match = []
         self.distance_match = []
         self.dismatch = []
@@ -106,7 +94,7 @@ class PD_FA():
             area_image = np.array(coord_image[K].area)
             self.image_area_total.append(area_image)
 
-        for i in range(len(coord_label)):   # image 与 label 之间 根据中心点 进行连通域的确定
+        for i in range(len(coord_label)):
             centroid_label = np.array(list(coord_label[i].centroid))
             for m in range(len(coord_image)):
                 centroid_image = np.array(list(coord_image[m].centroid))
@@ -115,14 +103,13 @@ class PD_FA():
                 if distance < 3:
                     self.distance_match.append(distance)
                     self.image_area_match.append(area_image)
-
-                    del coord_image[m]   # 匹配上一个之后就 清除一个
+                    del coord_image[m]
                     break
 
-        self.dismatch = [x for x in self.image_area_total if x not in self.image_area_match] # 在image里面 但是不在label里面
-        self.dismatch_pixel += np.sum(self.dismatch)  # Fa 虚警
+        self.dismatch = [x for x in self.image_area_total if x not in self.image_area_match]
+        self.dismatch_pixel += np.sum(self.dismatch)
         self.all_pixel += size[0] * size[1]
-        self.PD += len(self.distance_match)  # 如果中心点之间距离在3一下 就算Pd  所以Pd 是匹配上了的目标的个数
+        self.PD += len(self.distance_match)
 
     def get(self):
         Final_FA = self.dismatch_pixel / self.all_pixel
@@ -143,9 +130,9 @@ def batch_pix_accuracy(output, target):
         raise ValueError("Unknown target dimension")
 
     assert output.shape == target.shape, "Predict and Label Shape Don't Match"
-    predict = (output > 0).float()  # 将output 从 True Flase 转成 1 0
-    pixel_labeled = (target > 0).float().sum()  # GF中 1的个数
-    pixel_correct = (((predict == target).float()) * ((target > 0)).float()).sum()  # 预测对的个数
+    predict = (output > 0).float()
+    pixel_labeled = (target > 0).float().sum()
+    pixel_correct = (((predict == target).float()) * ((target > 0)).float()).sum()
     assert pixel_correct <= pixel_labeled, "Correct area should be smaller than Labeled"
     return pixel_correct, pixel_labeled
 
