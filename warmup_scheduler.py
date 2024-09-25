@@ -2,18 +2,6 @@ from torch.optim.lr_scheduler import _LRScheduler
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 class GradualWarmupScheduler(_LRScheduler):
-    """ Gradually warm-up(increasing) learning rate in optimizer.
-    Proposed in 'Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour'.
-    在optimizer中会设置一个基础学习率base lr,
-    当multiplier>1时,预热机制会在total_epoch内把学习率从base lr逐渐增加到multiplier*base lr,再接着开始正常的scheduler
-    当multiplier==1.0时,预热机制会在total_epoch内把学习率从0逐渐增加到base lr,再接着开始正常的scheduler
-    Args:
-        optimizer (Optimizer): Wrapped optimizer.
-        multiplier: target learning rate = base lr * multiplier if multiplier > 1.0. if multiplier = 1.0, lr starts from 0 and ends up with the base_lr.
-        total_epoch: target learning rate is reached at total_epoch, gradually
-        after_scheduler: after target_epoch, use this scheduler(eg. ReduceLROnPlateau)
-    """
-
     def __init__(self, optimizer, multiplier, total_epoch, after_scheduler=None):
         self.multiplier = multiplier
         if self.multiplier < 1.:
@@ -26,9 +14,8 @@ class GradualWarmupScheduler(_LRScheduler):
     def get_lr(self):
         if self.last_epoch > self.total_epoch:
             if self.after_scheduler and (not self.finished):
-                    self.after_scheduler.base_lrs = [base_lr * self.multiplier for base_lr in self.base_lrs]
-                    self.finished = True
-                # !这是很关键的一个环节，需要直接返回新的base-lr
+                self.after_scheduler.base_lrs = [base_lr * self.multiplier for base_lr in self.base_lrs]
+                self.finished = True
             return [base_lr for base_lr in self.after_scheduler.base_lrs]
         if self.multiplier == 1.0:
             return [base_lr * (float(self.last_epoch) / self.total_epoch) for base_lr in self.base_lrs]
@@ -38,10 +25,9 @@ class GradualWarmupScheduler(_LRScheduler):
     def step_ReduceLROnPlateau(self, metrics, epoch=None):
         if epoch is None:
             epoch = self.last_epoch + 1
-        self.last_epoch = epoch if epoch != 0 else 1  # ReduceLROnPlateau is called at the end of epoch, whereas others are called at beginning
-        print('warmuping...')
+        self.last_epoch = epoch if epoch != 0 else 1
         if self.last_epoch <= self.total_epoch:
-            warmup_lr=None
+            warmup_lr = None
             if self.multiplier == 1.0:
                 warmup_lr = [base_lr * (float(self.last_epoch) / self.total_epoch) for base_lr in self.base_lrs]
             else:
@@ -52,7 +38,7 @@ class GradualWarmupScheduler(_LRScheduler):
             if epoch is None:
                 self.after_scheduler.step(metrics, None)
             else:
-                self.after_scheduler.step(metrics,epoch - self.total_epoch)
+                self.after_scheduler.step(metrics, epoch - self.total_epoch)
 
     def step(self, epoch=None, metrics=None):
         if type(self.after_scheduler) != ReduceLROnPlateau:
