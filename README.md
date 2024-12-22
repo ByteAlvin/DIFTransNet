@@ -1,4 +1,4 @@
-# STFUNet：Swin Transformer Unet with Hierarchical Fusion Module for Infrared Small Target Detection
+# HESformer: A Hybrid Encoding Strategy with Hierarchical Progressive Feature Fusion for Infrared Small Target Detection
 
 
 
@@ -84,4 +84,4 @@ python test.py
 *The overall repository style is highly borrowed from [BasicIRSTD](https://github.com/YimianDai/open-acm). Thanks to Xinyi Ying.
 
 ## Contact
-**Welcome to raise issues or email to [liushenao23@mails.ucas.ac.cn](liushenao23@mails.ucas.ac.cn) or [shenaoliu@163.com](shenaoliu@163.com) for any question regarding our STFUNet.**
+**Welcome to raise issues or email to [liushenao23@mails.ucas.ac.cn](liushenao23@mails.ucas.ac.cn) or [shenaoliu@163.com](shenaoliu@163.com) for any question regarding our HESformer.**
