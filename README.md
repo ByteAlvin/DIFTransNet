@@ -1,4 +1,4 @@
-# HESformer: A Hybrid Encoding Strategy with Hierarchical Progressive Feature Fusion for Infrared Small Target Detection
+# DIFTransNet: Dual-Branch Interactive Fusion Network with CNN and Multi-Scale Transformer for Infrared Small Target Detection
 
 
 
